@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { storage } from '../lib/storage';
-import { BottomNav } from './BottomNav';
-import { TrendingDown, Calendar, Heart } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { storage } from "../lib/storage";
+import { BottomNav } from "./BottomNav";
+import { TrendingDown, Calendar, Heart } from "lucide-react";
 
 export function Stats() {
   const [expenses, setExpenses] = useState<any[]>([]);
@@ -14,14 +14,16 @@ export function Stats() {
     setExpenses(allExpenses);
 
     if (allExpenses.length > 0) {
-      const avgMood = allExpenses.reduce((sum, e) => sum + e.mood, 0) / allExpenses.length;
-      const avgFatigue = allExpenses.reduce((sum, e) => sum + e.fatigue, 0) / allExpenses.length;
+      const avgMood =
+        allExpenses.reduce((sum, e) => sum + e.mood, 0) / allExpenses.length;
+      const avgFatigue =
+        allExpenses.reduce((sum, e) => sum + e.fatigue, 0) / allExpenses.length;
       setMoodAverage(avgMood);
       setFatigueAverage(avgFatigue);
 
       // Calculate day of week heatmap (0 = Sunday, 6 = Saturday)
       const dayCount = new Array(7).fill(0);
-      allExpenses.forEach(e => {
+      allExpenses.forEach((e) => {
         const day = new Date(e.timestamp).getDay();
         dayCount[day]++;
       });
@@ -29,29 +31,31 @@ export function Stats() {
     }
   }, []);
 
-  const dayLabels = ['日', '月', '火', '水', '木', '金', '土'];
+  const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
   const maxCount = Math.max(...heatmapData, 1);
 
-  const moodEmojis = ['😢', '😟', '😐', '🙂', '😊'];
+  const moodEmojis = ["😢", "😟", "😐", "🙂", "😊"];
   const categories = {
-    food: { label: '食事', emoji: '🍔' },
-    shopping: { label: '買い物', emoji: '🛍️' },
-    entertainment: { label: '娯楽', emoji: '🎮' },
-    fashion: { label: 'ファッション', emoji: '👔' },
-    beauty: { label: '美容', emoji: '💄' },
-    other: { label: 'その他', emoji: '📦' },
+    food: { label: "食事", emoji: "🍔" },
+    shopping: { label: "日用品", emoji: "🛍️" },
+    entertainment: { label: "娯楽", emoji: "🎮" },
+    fashion: { label: "ファッション", emoji: "👔" },
+    beauty: { label: "美容", emoji: "💄" },
+    other: { label: "その他", emoji: "📦" },
   };
 
   const getCategoryStats = () => {
     const stats: any = {};
-    expenses.forEach(e => {
+    expenses.forEach((e) => {
       if (!stats[e.category]) {
         stats[e.category] = { count: 0, total: 0 };
       }
       stats[e.category].count++;
       stats[e.category].total += e.amount;
     });
-    return Object.entries(stats).sort((a: any, b: any) => b[1].total - a[1].total);
+    return Object.entries(stats).sort(
+      (a: any, b: any) => b[1].total - a[1].total,
+    );
   };
 
   const categoryStats = getCategoryStats();
@@ -69,7 +73,9 @@ export function Stats() {
           <div className="flex flex-col items-center justify-center h-[60vh]">
             <div className="text-6xl mb-4">📊</div>
             <p className="text-xl text-zinc-400 mb-2">まだデータがありません</p>
-            <p className="text-sm text-zinc-500">出費を記録すると、パターンが見えてきます</p>
+            <p className="text-sm text-zinc-500">
+              出費を記録すると、パターンが見えてきます
+            </p>
           </div>
         ) : (
           <>
@@ -80,7 +86,9 @@ export function Stats() {
                   <Heart size={20} className="text-purple-400" />
                   <span className="text-sm text-zinc-400">平均気分</span>
                 </div>
-                <div className="text-4xl mb-2">{moodEmojis[Math.round(moodAverage) - 1]}</div>
+                <div className="text-4xl mb-2">
+                  {moodEmojis[Math.round(moodAverage) - 1]}
+                </div>
                 <p className="text-sm text-zinc-400">
                   {moodAverage.toFixed(1)} / 5.0
                 </p>
@@ -92,7 +100,11 @@ export function Stats() {
                   <span className="text-sm text-zinc-400">平均疲労</span>
                 </div>
                 <div className="text-4xl mb-2">
-                  {fatigueAverage <= 1.5 ? '⚡' : fatigueAverage <= 2.5 ? '🔋' : '🪫'}
+                  {fatigueAverage <= 1.5
+                    ? "⚡"
+                    : fatigueAverage <= 2.5
+                      ? "🔋"
+                      : "🪫"}
                 </div>
                 <p className="text-sm text-zinc-400">
                   {fatigueAverage.toFixed(1)} / 3.0
@@ -109,24 +121,26 @@ export function Stats() {
               <div className="grid grid-cols-7 gap-2">
                 {dayLabels.map((day, index) => (
                   <div key={index} className="text-center">
-                    <div 
+                    <div
                       className="aspect-square rounded-lg mb-1 flex items-center justify-center"
                       style={{
-                        backgroundColor: heatmapData[index] > 0 
-                          ? `rgba(34, 211, 238, ${(heatmapData[index] / maxCount) * 0.8})`
-                          : 'rgba(39, 39, 42, 0.5)'
+                        backgroundColor:
+                          heatmapData[index] > 0
+                            ? `rgba(34, 211, 238, ${(heatmapData[index] / maxCount) * 0.8})`
+                            : "rgba(39, 39, 42, 0.5)",
                       }}
                     >
-                      <span className="text-xs font-medium">{heatmapData[index]}</span>
+                      <span className="text-xs font-medium">
+                        {heatmapData[index]}
+                      </span>
                     </div>
                     <span className="text-xs text-zinc-500">{day}</span>
                   </div>
                 ))}
               </div>
               <p className="text-xs text-zinc-500 mt-4">
-                {heatmapData.indexOf(Math.max(...heatmapData)) >= 0 && (
-                  `${dayLabels[heatmapData.indexOf(Math.max(...heatmapData))]}曜日に出費が多い傾向`
-                )}
+                {heatmapData.indexOf(Math.max(...heatmapData)) >= 0 &&
+                  `${dayLabels[heatmapData.indexOf(Math.max(...heatmapData))]}曜日に出費が多い傾向`}
               </p>
             </div>
 
@@ -135,9 +149,11 @@ export function Stats() {
               <h3 className="text-lg mb-4">カテゴリ別の内訳</h3>
               <div className="space-y-3">
                 {categoryStats.map(([cat, data]: any) => {
-                  const catInfo = categories[cat as keyof typeof categories] || categories.other;
+                  const catInfo =
+                    categories[cat as keyof typeof categories] ||
+                    categories.other;
                   return (
-                    <div 
+                    <div
                       key={cat}
                       className="p-4 bg-zinc-900 border border-zinc-800 rounded-2xl"
                     >
@@ -146,11 +162,16 @@ export function Stats() {
                           <span className="text-2xl">{catInfo.emoji}</span>
                           <span>{catInfo.label}</span>
                         </div>
-                        <span className="font-bold">¥{data.total.toLocaleString()}</span>
+                        <span className="font-bold">
+                          ¥{data.total.toLocaleString()}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between text-sm text-zinc-400">
                         <span>{data.count}回</span>
-                        <span>平均 ¥{Math.round(data.total / data.count).toLocaleString()}</span>
+                        <span>
+                          平均 ¥
+                          {Math.round(data.total / data.count).toLocaleString()}
+                        </span>
                       </div>
                     </div>
                   );
