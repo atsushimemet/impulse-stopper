@@ -1,39 +1,46 @@
-import { useState } from 'react';
-import { storage } from '../lib/storage';
-import { BottomNav } from './BottomNav';
-import { useNavigate } from 'react-router';
-import { Smile, Meh, Frown, Battery, BatteryMedium, BatteryLow } from 'lucide-react';
+import { useState } from "react";
+import { storage } from "../lib/storage";
+import { BottomNav } from "./BottomNav";
+import { useNavigate } from "react-router";
+import {
+  Smile,
+  Meh,
+  Frown,
+  Battery,
+  BatteryMedium,
+  BatteryLow,
+} from "lucide-react";
 
 export function AddExpense() {
   const navigate = useNavigate();
   const [amount, setAmount] = useState(5000);
   const [mood, setMood] = useState(3);
   const [fatigue, setFatigue] = useState(2);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
 
   const categories = [
-    { id: 'food', label: '食事', emoji: '🍔' },
-    { id: 'shopping', label: '買い物', emoji: '🛍️' },
-    { id: 'entertainment', label: '娯楽', emoji: '🎮' },
-    { id: 'fashion', label: 'ファッション', emoji: '👔' },
-    { id: 'beauty', label: '美容', emoji: '💄' },
-    { id: 'other', label: 'その他', emoji: '📦' },
+    { id: "food", label: "食事", emoji: "🍔" },
+    { id: "shopping", label: "日用品", emoji: "🛍️" },
+    { id: "entertainment", label: "娯楽", emoji: "🎮" },
+    { id: "fashion", label: "ファッション", emoji: "👔" },
+    { id: "beauty", label: "美容", emoji: "💄" },
+    { id: "other", label: "その他", emoji: "📦" },
   ];
 
   const handleSubmit = () => {
     const settings = storage.getSettings();
-    
+
     // Check if amount exceeds threshold
     if (amount >= settings.impulseThreshold) {
       // Navigate to timer
-      navigate('/timer', { 
-        state: { 
-          amount, 
-          mood, 
-          fatigue, 
-          category 
-        } 
+      navigate("/timer", {
+        state: {
+          amount,
+          mood,
+          fatigue,
+          category,
+        },
       });
       return;
     }
@@ -52,15 +59,15 @@ export function AddExpense() {
     // Show success feedback
     setShowSuccess(true);
     setTimeout(() => {
-      navigate('/');
+      navigate("/");
     }, 1500);
   };
 
-  const moodEmojis = ['😢', '😟', '😐', '🙂', '😊'];
-  const moodLabels = ['とても悪い', '悪い', '普通', '良い', 'とても良い'];
+  const moodEmojis = ["😢", "😟", "😐", "🙂", "😊"];
+  const moodLabels = ["とても悪い", "悪い", "普通", "良い", "とても良い"];
 
   const fatigueIcons = [Battery, BatteryMedium, BatteryLow];
-  const fatigueLabels = ['元気', 'やや疲れ', 'とても疲れ'];
+  const fatigueLabels = ["元気", "やや疲れ", "とても疲れ"];
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white pb-20">
@@ -68,7 +75,9 @@ export function AddExpense() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl mb-2">出費を記録</h1>
-          <p className="text-sm text-zinc-400">3秒で完了。感情を記録しましょう</p>
+          <p className="text-sm text-zinc-400">
+            3秒で完了。感情を記録しましょう
+          </p>
         </div>
 
         {showSuccess && (
@@ -118,12 +127,14 @@ export function AddExpense() {
                   onClick={() => setMood(moodValue)}
                   className={`flex-1 p-4 rounded-2xl border-2 transition-all ${
                     mood === moodValue
-                      ? 'border-cyan-400 bg-cyan-400/10 scale-110'
-                      : 'border-zinc-800 bg-zinc-900'
+                      ? "border-cyan-400 bg-cyan-400/10 scale-110"
+                      : "border-zinc-800 bg-zinc-900"
                   }`}
                 >
                   <div className="text-3xl mb-1">{emoji}</div>
-                  <div className="text-xs text-zinc-400">{moodLabels[index]}</div>
+                  <div className="text-xs text-zinc-400">
+                    {moodLabels[index]}
+                  </div>
                 </button>
               );
             })}
@@ -143,14 +154,16 @@ export function AddExpense() {
                   onClick={() => setFatigue(fatigueValue)}
                   className={`flex-1 p-4 rounded-2xl border-2 transition-all ${
                     fatigue === fatigueValue
-                      ? 'border-purple-400 bg-purple-400/10'
-                      : 'border-zinc-800 bg-zinc-900'
+                      ? "border-purple-400 bg-purple-400/10"
+                      : "border-zinc-800 bg-zinc-900"
                   }`}
                 >
-                  <Icon 
-                    size={32} 
+                  <Icon
+                    size={32}
                     className={`mx-auto mb-2 ${
-                      fatigue === fatigueValue ? 'text-purple-400' : 'text-zinc-400'
+                      fatigue === fatigueValue
+                        ? "text-purple-400"
+                        : "text-zinc-400"
                     }`}
                   />
                   <div className="text-xs text-zinc-400">{label}</div>
@@ -170,8 +183,8 @@ export function AddExpense() {
                 onClick={() => setCategory(cat.id)}
                 className={`p-4 rounded-2xl border-2 transition-all ${
                   category === cat.id
-                    ? 'border-cyan-400 bg-cyan-400/10'
-                    : 'border-zinc-800 bg-zinc-900'
+                    ? "border-cyan-400 bg-cyan-400/10"
+                    : "border-zinc-800 bg-zinc-900"
                 }`}
               >
                 <div className="text-3xl mb-1">{cat.emoji}</div>
@@ -191,9 +204,9 @@ export function AddExpense() {
         </button>
 
         <p className="text-center text-xs text-zinc-500 mt-4">
-          {amount >= storage.getSettings().impulseThreshold 
-            ? '⏱️ この金額はクールダウン推奨です' 
-            : '✨ すぐに記録されます'}
+          {amount >= storage.getSettings().impulseThreshold
+            ? "⏱️ この金額はクールダウン推奨です"
+            : "✨ すぐに記録されます"}
         </p>
       </div>
 
